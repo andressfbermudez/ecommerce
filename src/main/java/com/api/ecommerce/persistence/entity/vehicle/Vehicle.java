@@ -3,27 +3,35 @@ package com.api.ecommerce.persistence.entity.vehicle;
 import lombok.Getter;
 import lombok.Setter;
 import jakarta.persistence.*;
-import java.time.LocalDateTime;
 import lombok.NoArgsConstructor;
-import lombok.AllArgsConstructor;
-import org.springframework.data.annotation.CreatedBy;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
+import com.api.ecommerce.web.dao.VehicleCreateDAO;
+import com.api.ecommerce.persistence.entity.Category;
+import com.api.ecommerce.persistence.entity.Auditable;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
-@Table(name = "vehicle")
+@Table(name = "vehicles")
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
-public class Vehicle {
+@EntityListeners(AuditingEntityListener.class)
+public class Vehicle extends Auditable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    protected Long id;
+
+    @Column(nullable = false, length = 100)
+    protected String name;
+
+    @Column(columnDefinition = "TEXT")
+    protected String description;
 
     @Column(nullable = false)
-    private String title;
+    protected Double price;
+
+    @Column(nullable = false)
+    protected Integer stock;
 
     @Column(nullable = false, length = 100)
     private String brand;
@@ -33,9 +41,6 @@ public class Vehicle {
 
     @Column(nullable = false)
     private Integer year;
-
-    @Column(nullable = false)
-    private Double price;
 
     @Column(nullable = false)
     private Integer mileage;
@@ -57,17 +62,31 @@ public class Vehicle {
     @Column(nullable = false, length = 100)
     private String color;
 
-    private String description;
-
     @Column(nullable = false, length = 100)
     private String location;
 
-    @CreatedBy
-    private String createdBy;
+//    @CreatedBy
+//    protected String createdBy;
 
-    @CreatedDate
-    private LocalDateTime createdDate;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id", nullable = false)
+    protected Category category;
 
-    @LastModifiedDate
-    private LocalDateTime lastModifiedDate;
+    public Vehicle(VehicleCreateDAO vehicleCreateDAO) {
+        this.name = vehicleCreateDAO.name();
+        this.description = vehicleCreateDAO.description();
+        this.price = vehicleCreateDAO.price();
+        this.stock = vehicleCreateDAO.stock();
+        this.brand = vehicleCreateDAO.brand();
+        this.model = vehicleCreateDAO.model();
+        this.year = vehicleCreateDAO.year();
+        this.mileage = vehicleCreateDAO.mileage();
+        this.engineCapacity = vehicleCreateDAO.engineCapacity();
+        this.fuelType = vehicleCreateDAO.fuelType();
+        this.transmission = vehicleCreateDAO.transmission();
+        this.doors = vehicleCreateDAO.doors();
+        this.color = vehicleCreateDAO.color();
+        this.location = vehicleCreateDAO.location();
+        this.category = vehicleCreateDAO.category();
+    }
 }
