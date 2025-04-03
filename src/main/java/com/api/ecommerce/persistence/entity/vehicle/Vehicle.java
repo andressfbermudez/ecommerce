@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import jakarta.persistence.*;
 import lombok.NoArgsConstructor;
-import com.api.ecommerce.web.dao.VehicleCreateDAO;
+import com.api.ecommerce.web.dto.VehicleCreateDTO;
 import com.api.ecommerce.persistence.entity.Category;
 import com.api.ecommerce.persistence.entity.Auditable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -21,7 +21,7 @@ public class Vehicle extends Auditable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected Long id;
 
-    @Column(nullable = false, length = 100)
+    @Column(nullable = false, length = 100, unique = true)
     protected String name;
 
     @Column(columnDefinition = "TEXT")
@@ -72,21 +72,21 @@ public class Vehicle extends Auditable {
     @JoinColumn(name = "category_id", nullable = false)
     protected Category category;
 
-    public Vehicle(VehicleCreateDAO vehicleCreateDAO) {
-        this.name = vehicleCreateDAO.name();
-        this.description = vehicleCreateDAO.description();
-        this.price = vehicleCreateDAO.price();
-        this.stock = vehicleCreateDAO.stock();
-        this.brand = vehicleCreateDAO.brand();
-        this.model = vehicleCreateDAO.model();
-        this.year = vehicleCreateDAO.year();
-        this.mileage = vehicleCreateDAO.mileage();
-        this.engineCapacity = vehicleCreateDAO.engineCapacity();
-        this.fuelType = vehicleCreateDAO.fuelType();
-        this.transmission = vehicleCreateDAO.transmission();
-        this.doors = vehicleCreateDAO.doors();
-        this.color = vehicleCreateDAO.color();
-        this.location = vehicleCreateDAO.location();
-        this.category = vehicleCreateDAO.category();
+    public Vehicle(VehicleCreateDTO vehicleCreateDTO) {
+        this.name = vehicleCreateDTO.name();
+        this.description = vehicleCreateDTO.description();
+        this.price = vehicleCreateDTO.price();
+        this.stock = vehicleCreateDTO.stock();
+        this.brand = vehicleCreateDTO.brand();
+        this.model = vehicleCreateDTO.model();
+        this.year = vehicleCreateDTO.year();
+        this.mileage = vehicleCreateDTO.mileage();
+        this.engineCapacity = vehicleCreateDTO.engineCapacity();
+        this.fuelType = vehicleCreateDTO.fuelType();
+        this.transmission = vehicleCreateDTO.transmission();
+        this.doors = vehicleCreateDTO.doors();
+        this.color = vehicleCreateDTO.color();
+        this.location = vehicleCreateDTO.location();
+        this.category = new Category(1L, "vehicle");
     }
 }
