@@ -72,4 +72,28 @@ public class VehicleController {
 
         return ResponseEntity.ok().location(url).build(); // Retorna 200 OK con la URL en el header
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> softDeleteVehicle(@PathVariable Long id) {
+        if (!vehicleService.existsById(id)) {
+            return ResponseEntity.badRequest().build();
+        }
+        vehicleService.softDeleteVehicleById(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/restore/{id}")
+    public ResponseEntity<Void> restoreVehicle(@PathVariable Long id, UriComponentsBuilder uriComponentsBuilder) {
+        Long idRestoreVehicle = vehicleService.restoreVehicleById(id);
+
+        if (idRestoreVehicle == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        URI url = uriComponentsBuilder.path("/api/vehicles/{id}")
+                .buildAndExpand(idRestoreVehicle)
+                .toUri();
+
+        return ResponseEntity.ok().location(url).build();
+    }
 }

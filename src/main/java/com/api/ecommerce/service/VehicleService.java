@@ -61,4 +61,24 @@ public class VehicleService {
             return vehicle.getId();
         }).orElse(null);
     }
+
+    @Transactional
+    public void softDeleteVehicleById(Long id) {
+        vehicleRepository.findById(id).ifPresent(vehicle -> vehicle.setIsActive(false));
+    }
+
+    @Transactional
+    public Long restoreVehicleById(Long id) {
+        return vehicleRepository.findById(id)
+                .map(vehicle -> {
+                    vehicle.setIsActive(true);
+                    return vehicle.getId();
+                })
+                .orElse(null);
+    }
+
+// *********************************************************************************************************************
+    public boolean existsById(Long id) {
+        return vehicleRepository.existsById(id);
+    }
 }

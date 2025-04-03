@@ -65,12 +65,15 @@ public class Vehicle extends Auditable {
     @Column(nullable = false, length = 100)
     private String location;
 
+    @Column(name = "is_active", nullable = false)
+    private Boolean isActive = true;
+
 //    @CreatedBy
 //    protected String createdBy;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id", nullable = false)
-    protected Category category;
+    protected Category category = new Category(1L, "vehicle");
 
     public Vehicle(VehicleCreateDTO vehicleCreateDTO) {
         this.name = vehicleCreateDTO.name().trim();
@@ -87,6 +90,5 @@ public class Vehicle extends Auditable {
         this.doors = vehicleCreateDTO.doors();
         this.color = vehicleCreateDTO.color().trim();
         this.location = vehicleCreateDTO.location().trim();
-        this.category = new Category(1L, "vehicle");
     }
 }
