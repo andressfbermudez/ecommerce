@@ -73,20 +73,20 @@ public class Vehicle extends Auditable {
     protected Category category;
 
     public Vehicle(VehicleCreateDTO vehicleCreateDTO) {
-        this.name = vehicleCreateDTO.name();
-        this.description = vehicleCreateDTO.description();
+        this.name = vehicleCreateDTO.name().trim();
+        this.description = vehicleCreateDTO.description().trim();
         this.price = vehicleCreateDTO.price();
         this.stock = vehicleCreateDTO.stock();
-        this.brand = vehicleCreateDTO.brand();
-        this.model = vehicleCreateDTO.model();
+        this.brand = vehicleCreateDTO.brand().trim();
+        this.model = vehicleCreateDTO.model().trim();
         this.year = vehicleCreateDTO.year();
         this.mileage = vehicleCreateDTO.mileage();
         this.engineCapacity = vehicleCreateDTO.engineCapacity();
         this.fuelType = vehicleCreateDTO.fuelType();
         this.transmission = vehicleCreateDTO.transmission();
         this.doors = vehicleCreateDTO.doors();
-        this.color = vehicleCreateDTO.color();
-        this.location = vehicleCreateDTO.location();
+        this.color = vehicleCreateDTO.color().trim();
+        this.location = vehicleCreateDTO.location().trim();
         this.category = new Category(1L, "vehicle");
     }
 }

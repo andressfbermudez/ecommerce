@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import com.api.ecommerce.service.VehicleService;
 import org.springframework.web.bind.annotation.*;
 import com.api.ecommerce.web.dto.VehicleCreateDTO;
+import com.api.ecommerce.web.dto.VehicleUpdatedDTO;
 import com.api.ecommerce.web.dto.VehicleResponseDTO;
 import org.springframework.web.util.UriComponentsBuilder;
 import org.springframework.validation.annotation.Validated;
@@ -51,5 +52,24 @@ public class VehicleController {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(vehicleFound);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Void> updateVehicle(
+            @PathVariable Long id,
+            @Valid @RequestBody VehicleUpdatedDTO vehicleUpdatedDTO,
+            UriComponentsBuilder uriComponentsBuilder
+    ) {
+        Long idVehicleUpdated = vehicleService.updateVehicle(id, vehicleUpdatedDTO);
+
+        if (idVehicleUpdated == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        URI url = uriComponentsBuilder.path("/api/vehicles/{id}")
+                .buildAndExpand(idVehicleUpdated)
+                .toUri();
+
+        return ResponseEntity.ok().location(url).build(); // Retorna 200 OK con la URL en el header
     }
 }

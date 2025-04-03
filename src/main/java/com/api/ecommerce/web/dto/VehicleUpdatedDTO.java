@@ -4,60 +4,53 @@ import jakarta.validation.constraints.*;
 import com.api.ecommerce.persistence.entity.vehicle.FuelType;
 import com.api.ecommerce.persistence.entity.vehicle.Transmission;
 
-public record VehicleCreateDTO(
+public record VehicleUpdatedDTO(
 
-        @NotBlank(message = "Name is required")
         @Size(max = 100, message = "The name cannot have more than 100 characters")
+        @Pattern(regexp = "^(?!\\s*$).+", message = "The name cannot be empty or blank")
         String name,
 
         @Size(max = 255, message = "The description cannot have more than 255 characters")
+        @Pattern(regexp = "^(?!\\s*$).+", message = "The description cannot be empty or blank")
         String description,
 
-        @NotNull(message = "Price is required")
         @DecimalMin(value = "0.0", inclusive = false, message = "The price must be greater than 0")
         Double price,
 
-        @NotNull(message = "Stock is mandatory")
         @Min(value = 0, message = "The stock cannot be negative")
         Integer stock,
 
-        @NotBlank(message = "The brand is mandatory")
         @Size(max = 100, message = "The brand cannot have more than 100 characters")
+        @Pattern(regexp = "^(?!\\s*$).+", message = "The brand cannot be empty or blank")
         String brand,
 
-        @NotBlank(message = "The model is mandatory")
         @Size(max = 100, message = "The model cannot have more than 100 characters")
+        @Pattern(regexp = "^(?!\\s*$).+", message = "The model cannot be empty or blank")
         String model,
 
-        @NotNull(message = "The year is mandatory")
-        @Min(value = 2010, message = "The year must be valid")
+        @Min(value = 2010, message = "The year must be 2010 or later")
         Integer year,
 
-        @NotNull(message = "Mileage is mandatory")
         @Min(value = 0, message = "The mileage cannot be negative")
         Integer mileage,
 
-        @NotNull(message = "Cylinder capacity is mandatory")
-        @Min(value = 0, message = "The displacement cannot be negative")
+        @Min(value = 0, message = "The engine capacity cannot be negative")
         Integer engineCapacity,
 
-        @NotNull(message = "The fuel type is mandatory. GASOLINE - DIESEL - ELECTRIC - HIBRID")
         FuelType fuelType,
 
-        @NotNull(message = "Transmission is mandatory. MANUAL - AUTOMATIC")
         Transmission transmission,
 
-        @NotNull(message = "The number of doors is mandatory")
         @Min(value = 2, message = "Must have at least 2 doors")
         @Max(value = 5, message = "It cannot have more than 5 doors")
         Integer doors,
 
-        @NotBlank(message = "Color is mandatory")
         @Size(max = 100, message = "The color cannot have more than 100 characters")
+        @Pattern(regexp = "^(?!\\s*$).+", message = "The color cannot be empty or blank")
         String color,
 
-        @NotBlank(message = "Location is required")
         @Size(max = 100, message = "The location cannot have more than 100 characters")
+        @Pattern(regexp = "^(?!\\s*$).+", message = "The location cannot be empty or blank")
         String location
 ) {
 }
