@@ -26,11 +26,26 @@ public class VehicleService {
         return vehicleRepository.save(newVehicle).getId();
     }
 
-    public List<VehicleResponseDTO> findAll() {
+    public List<VehicleResponseDTO> findAllIsActiveTrue() {
+        return vehicleRepository.findByIsActiveTrue()
+                .stream()
+                .map(VehicleResponseDTO::convertToVehicleResponseDAO)
+                .toList();
+    }
+
+    public List<VehicleResponseDTO> findAllIncludingInactive() {
         return vehicleRepository.findAll()
                 .stream()
                 .map(VehicleResponseDTO::convertToVehicleResponseDAO)
                 .toList();
+    }
+
+    public VehicleResponseDTO findByIdAndIsActiveTrue(Long id) {
+        if (vehicleRepository.existsByIdAndIsActiveTrue(id)) {
+            Optional<Vehicle> optionalVehicle = vehicleRepository.findByIdAndIsActiveTrue(id);
+            return VehicleResponseDTO.convertToVehicleResponseDAO(optionalVehicle.get());
+        }
+        return null;
     }
 
     public VehicleResponseDTO findById(Long id) {
@@ -43,7 +58,7 @@ public class VehicleService {
 
     @Transactional
     public Long updateVehicle(Long id, VehicleUpdatedDTO v) {
-        return vehicleRepository.findById(id).map(vehicle -> {
+        return vehicleRepository.findByIdAndIsActiveTrue(id).map(vehicle -> {
             if (v.name() != null) vehicle.setName(v.name().trim());
             if (v.description() != null) vehicle.setDescription(v.description().trim());
             if (v.price() != null) vehicle.setPrice(v.price());
@@ -64,7 +79,7 @@ public class VehicleService {
 
     @Transactional
     public void softDeleteVehicleById(Long id) {
-        vehicleRepository.findById(id).ifPresent(vehicle -> vehicle.setIsActive(false));
+        vehicleRepository.findByIdAndIsActiveTrue(id).ifPresent(vehicle -> vehicle.setIsActive(false));
     }
 
     @Transactional
@@ -76,7 +91,6 @@ public class VehicleService {
                 })
                 .orElse(null);
     }
-
 // *********************************************************************************************************************
     public boolean existsById(Long id) {
         return vehicleRepository.existsById(id);

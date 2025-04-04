@@ -40,12 +40,27 @@ public class VehicleController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<VehicleResponseDTO>> getAll() {
-        List<VehicleResponseDTO> vehicles = vehicleService.findAll();
+    public ResponseEntity<List<VehicleResponseDTO>> findAllIsActiveTrue() {
+        List<VehicleResponseDTO> vehicles = vehicleService.findAllIsActiveTrue();
+        return ResponseEntity.ok(vehicles);
+    }
+
+    @GetMapping("/all-including-inactive")
+    public ResponseEntity<List<VehicleResponseDTO>> findAllIncludingInactive() {
+        List<VehicleResponseDTO> vehicles = vehicleService.findAllIncludingInactive();
         return ResponseEntity.ok(vehicles);
     }
 
     @GetMapping("/{id}")
+    public ResponseEntity<VehicleResponseDTO> findByIdAndIsActiveTrue(@PathVariable Long id) {
+        VehicleResponseDTO vehicleFound = vehicleService.findByIdAndIsActiveTrue(id);
+        if (vehicleFound == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(vehicleFound);
+    }
+
+    @GetMapping("/find/{id}")
     public ResponseEntity<VehicleResponseDTO> findById(@PathVariable Long id) {
         VehicleResponseDTO vehicleFound = vehicleService.findById(id);
         if (vehicleFound == null) {
