@@ -69,6 +69,26 @@ public class VehicleController {
         return ResponseEntity.ok(vehicleFound);
     }
 
+    @GetMapping("/search")
+    public ResponseEntity<List<VehicleResponseDTO>> search(
+            @RequestParam(required = false) String brand,
+            @RequestParam(required = false) String model,
+            @RequestParam(required = false) Integer year,
+            @RequestParam(required = false) Double price,
+            @RequestParam(required = false) Integer doors,
+            @RequestParam(required = false) String color,
+            @RequestParam(required = false) String location
+    ) {
+        if (brand == null && model == null && year == null && price == null &&
+                doors == null && color == null && location == null) {
+            return ResponseEntity.noContent().build();
+        }
+
+        List<VehicleResponseDTO> vehiclesFound = vehicleService.search(brand, model, year, price,
+                doors, color, location);
+        return ResponseEntity.ok(vehiclesFound);
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<Void> updateVehicle(
             @PathVariable Long id,

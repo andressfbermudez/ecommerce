@@ -29,21 +29,21 @@ public class VehicleService {
     public List<VehicleResponseDTO> findAllIsActiveTrue() {
         return vehicleRepository.findByIsActiveTrue()
                 .stream()
-                .map(VehicleResponseDTO::convertToVehicleResponseDAO)
+                .map(VehicleResponseDTO::convertToVehicleResponseDTO)
                 .toList();
     }
 
     public List<VehicleResponseDTO> findAllIncludingInactive() {
         return vehicleRepository.findAll()
                 .stream()
-                .map(VehicleResponseDTO::convertToVehicleResponseDAO)
+                .map(VehicleResponseDTO::convertToVehicleResponseDTO)
                 .toList();
     }
 
     public VehicleResponseDTO findByIdAndIsActiveTrue(Long id) {
         if (vehicleRepository.existsByIdAndIsActiveTrue(id)) {
             Optional<Vehicle> optionalVehicle = vehicleRepository.findByIdAndIsActiveTrue(id);
-            return VehicleResponseDTO.convertToVehicleResponseDAO(optionalVehicle.get());
+            return VehicleResponseDTO.convertToVehicleResponseDTO(optionalVehicle.get());
         }
         return null;
     }
@@ -51,9 +51,18 @@ public class VehicleService {
     public VehicleResponseDTO findById(Long id) {
         if (vehicleRepository.existsById(id)) {
             Optional<Vehicle> optionalVehicle = vehicleRepository.findById(id);
-            return VehicleResponseDTO.convertToVehicleResponseDAO(optionalVehicle.get());
+            return VehicleResponseDTO.convertToVehicleResponseDTO(optionalVehicle.get());
         }
         return null;
+    }
+
+    public List<VehicleResponseDTO> search(String brand, String model, Integer year, Double price,
+                                           Integer doors, String color, String location
+    ) {
+        return vehicleRepository.search(brand, model, year, price, doors, color, location)
+                .stream()
+                .map(VehicleResponseDTO::convertToVehicleResponseDTO)
+                .toList();
     }
 
     @Transactional

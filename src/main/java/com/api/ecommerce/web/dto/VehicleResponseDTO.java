@@ -25,7 +25,7 @@ public record VehicleResponseDTO(
         LocalDateTime createdDate,
         LocalDateTime lastModifiedDate
 ) {
-    public static VehicleResponseDTO convertToVehicleResponseDAO(Vehicle vehicle) {
+    public static VehicleResponseDTO convertToVehicleResponseDTO(Vehicle vehicle) {
         return new VehicleResponseDTO(
                 vehicle.getId(), vehicle.getName(), vehicle.getDescription(), vehicle.getPrice(),
                 vehicle.getStock(), vehicle.getBrand(), vehicle.getModel(), vehicle.getYear(),
