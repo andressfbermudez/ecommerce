@@ -1,4 +1,4 @@
-package com.api.ecommerce.web.dto;
+package com.api.ecommerce.web.dto.vehicledto;
 
 import jakarta.validation.constraints.*;
 import com.api.ecommerce.persistence.entity.vehicle.FuelType;

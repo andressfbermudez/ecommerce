@@ -4,9 +4,9 @@ import lombok.Getter;
 import lombok.Setter;
 import jakarta.persistence.*;
 import lombok.NoArgsConstructor;
-import com.api.ecommerce.web.dto.VehicleCreateDTO;
 import com.api.ecommerce.persistence.entity.Category;
 import com.api.ecommerce.persistence.entity.Auditable;
+import com.api.ecommerce.web.dto.vehicledto.VehicleCreateDTO;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
@@ -15,7 +15,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @Setter
 @NoArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
-public class Vehicle extends Auditable {
+public class VehicleEntity extends Auditable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -75,7 +75,7 @@ public class Vehicle extends Auditable {
     @JoinColumn(name = "category_id", nullable = false)
     protected Category category = new Category(1L, "vehicle");
 
-    public Vehicle(VehicleCreateDTO vehicleCreateDTO) {
+    public VehicleEntity(VehicleCreateDTO vehicleCreateDTO) {
         this.name = vehicleCreateDTO.name().trim();
         this.description = vehicleCreateDTO.description().trim();
         this.price = vehicleCreateDTO.price();

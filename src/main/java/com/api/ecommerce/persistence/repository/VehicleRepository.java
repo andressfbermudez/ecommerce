@@ -4,14 +4,14 @@ import java.util.List;
 import java.util.Optional;
 import org.springframework.stereotype.Repository;
 import org.springframework.data.jpa.repository.Query;
-import com.api.ecommerce.persistence.entity.vehicle.Vehicle;
+import com.api.ecommerce.persistence.entity.vehicle.VehicleEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 @Repository
-public interface VehicleRepository extends JpaRepository<Vehicle, Long> {
+public interface VehicleRepository extends JpaRepository<VehicleEntity, Long> {
 
-    List<Vehicle> findByIsActiveTrue();
-    Optional<Vehicle> findByIdAndIsActiveTrue(Long id);
+    List<VehicleEntity> findByIsActiveTrue();
+    Optional<VehicleEntity> findByIdAndIsActiveTrue(Long id);
     boolean existsByIdAndIsActiveTrue(Long id);
 
     @Query(value = """
@@ -25,6 +25,6 @@ public interface VehicleRepository extends JpaRepository<Vehicle, Long> {
                 AND (:location IS NULL OR location = :location)
                 AND is_active = TRUE
                 """, nativeQuery = true)
-    List<Vehicle> search(String brand, String model, Integer year,
-                         Double price, Integer doors, String color, String location);
+    List<VehicleEntity> search(String brand, String model, Integer year,
+                               Double price, Integer doors, String color, String location);
 }

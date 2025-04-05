@@ -4,10 +4,10 @@ import java.util.List;
 import java.util.Optional;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
-import com.api.ecommerce.web.dto.VehicleCreateDTO;
-import com.api.ecommerce.web.dto.VehicleUpdatedDTO;
-import com.api.ecommerce.web.dto.VehicleResponseDTO;
-import com.api.ecommerce.persistence.entity.vehicle.Vehicle;
+import com.api.ecommerce.web.dto.vehicledto.VehicleCreateDTO;
+import com.api.ecommerce.web.dto.vehicledto.VehicleUpdatedDTO;
+import com.api.ecommerce.web.dto.vehicledto.VehicleResponseDTO;
+import com.api.ecommerce.persistence.entity.vehicle.VehicleEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.api.ecommerce.persistence.repository.VehicleRepository;
 
@@ -22,8 +22,8 @@ public class VehicleService {
     }
 
     public Long createVehicle(VehicleCreateDTO vehicleCreateDTO) {
-        Vehicle newVehicle = new Vehicle(vehicleCreateDTO);
-        return vehicleRepository.save(newVehicle).getId();
+        VehicleEntity newVehicleEntity = new VehicleEntity(vehicleCreateDTO);
+        return vehicleRepository.save(newVehicleEntity).getId();
     }
 
     public List<VehicleResponseDTO> findAllIsActiveTrue() {
@@ -42,7 +42,7 @@ public class VehicleService {
 
     public VehicleResponseDTO findByIdAndIsActiveTrue(Long id) {
         if (vehicleRepository.existsByIdAndIsActiveTrue(id)) {
-            Optional<Vehicle> optionalVehicle = vehicleRepository.findByIdAndIsActiveTrue(id);
+            Optional<VehicleEntity> optionalVehicle = vehicleRepository.findByIdAndIsActiveTrue(id);
             return VehicleResponseDTO.convertToVehicleResponseDTO(optionalVehicle.get());
         }
         return null;
@@ -50,7 +50,7 @@ public class VehicleService {
 
     public VehicleResponseDTO findById(Long id) {
         if (vehicleRepository.existsById(id)) {
-            Optional<Vehicle> optionalVehicle = vehicleRepository.findById(id);
+            Optional<VehicleEntity> optionalVehicle = vehicleRepository.findById(id);
             return VehicleResponseDTO.convertToVehicleResponseDTO(optionalVehicle.get());
         }
         return null;
@@ -67,36 +67,36 @@ public class VehicleService {
 
     @Transactional
     public Long updateVehicle(Long id, VehicleUpdatedDTO v) {
-        return vehicleRepository.findByIdAndIsActiveTrue(id).map(vehicle -> {
-            if (v.name() != null) vehicle.setName(v.name().trim());
-            if (v.description() != null) vehicle.setDescription(v.description().trim());
-            if (v.price() != null) vehicle.setPrice(v.price());
-            if (v.stock() != null) vehicle.setStock(v.stock());
-            if (v.brand() != null) vehicle.setBrand(v.brand().trim());
-            if (v.model() != null) vehicle.setModel(v.model().trim());
-            if (v.year() != null) vehicle.setYear(v.year());
-            if (v.mileage() != null) vehicle.setMileage(v.mileage());
-            if (v.engineCapacity() != null) vehicle.setEngineCapacity(v.engineCapacity());
-            if (v.transmission() != null) vehicle.setTransmission(v.transmission());
-            if (v.doors() != null) vehicle.setDoors(v.doors());
-            if (v.color() != null) vehicle.setColor(v.color().trim());
-            if (v.location() != null) vehicle.setLocation(v.location().trim());
+        return vehicleRepository.findByIdAndIsActiveTrue(id).map(vehicleEntity -> {
+            if (v.name() != null) vehicleEntity.setName(v.name().trim());
+            if (v.description() != null) vehicleEntity.setDescription(v.description().trim());
+            if (v.price() != null) vehicleEntity.setPrice(v.price());
+            if (v.stock() != null) vehicleEntity.setStock(v.stock());
+            if (v.brand() != null) vehicleEntity.setBrand(v.brand().trim());
+            if (v.model() != null) vehicleEntity.setModel(v.model().trim());
+            if (v.year() != null) vehicleEntity.setYear(v.year());
+            if (v.mileage() != null) vehicleEntity.setMileage(v.mileage());
+            if (v.engineCapacity() != null) vehicleEntity.setEngineCapacity(v.engineCapacity());
+            if (v.transmission() != null) vehicleEntity.setTransmission(v.transmission());
+            if (v.doors() != null) vehicleEntity.setDoors(v.doors());
+            if (v.color() != null) vehicleEntity.setColor(v.color().trim());
+            if (v.location() != null) vehicleEntity.setLocation(v.location().trim());
 
-            return vehicle.getId();
+            return vehicleEntity.getId();
         }).orElse(null);
     }
 
     @Transactional
     public void softDeleteVehicleById(Long id) {
-        vehicleRepository.findByIdAndIsActiveTrue(id).ifPresent(vehicle -> vehicle.setIsActive(false));
+        vehicleRepository.findByIdAndIsActiveTrue(id).ifPresent(vehicleEntity -> vehicleEntity.setIsActive(false));
     }
 
     @Transactional
     public Long restoreVehicleById(Long id) {
         return vehicleRepository.findById(id)
-                .map(vehicle -> {
-                    vehicle.setIsActive(true);
-                    return vehicle.getId();
+                .map(vehicleEntity -> {
+                    vehicleEntity.setIsActive(true);
+                    return vehicleEntity.getId();
                 })
                 .orElse(null);
     }
