@@ -1,4 +1,4 @@
-package com.api.ecommerce.configuration;
+package com.api.ecommerce.web.config;
 
 import org.springframework.http.HttpMethod;
 import org.springframework.context.annotation.Bean;
@@ -20,7 +20,7 @@ public class SecurityConfig {
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests((authorizeHttpRequests) ->
                         authorizeHttpRequests
-                                .requestMatchers(HttpMethod.GET, "/api/vehicles/**").permitAll()
+                                .requestMatchers(HttpMethod.POST, "/api/users/auth/**").permitAll()
                                 .anyRequest()
                                 .authenticated()
                 )

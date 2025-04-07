@@ -12,3 +12,5 @@ public class EcommerceApplication {
 		SpringApplication.run(EcommerceApplication.class, args);
 	}
 }
+
+// https://github.com/platzi/curso-java-spring-security

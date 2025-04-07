@@ -1,10 +1,11 @@
-package com.api.ecommerce.persistence.entity;
+package com.api.ecommerce.persistence.entity.user;
 
 import lombok.Getter;
 import lombok.Setter;
 import jakarta.persistence.*;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
+import com.api.ecommerce.persistence.entity.Auditable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
@@ -29,6 +30,7 @@ public class UserEntity extends Auditable {
     @Column(nullable = false, columnDefinition = "TEXT")
     private String password;
 
-    @Column(nullable = false, length = 15)
-    private String role;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Role role;
 }

@@ -2,7 +2,9 @@ package com.api.ecommerce.web.dto.userdto;
 
 import jakarta.validation.constraints.Size;
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.NotBlank;
+import com.api.ecommerce.persistence.entity.user.Role;
 
 public record UserRegisterDTO(
 
@@ -18,7 +20,7 @@ public record UserRegisterDTO(
         @Size(min = 6, message = "The password must be at least 6 characters long.")
         String password,
 
-        @NotBlank(message = "The role is mandatory")
-        String role
+        @NotNull(message = "The role is mandatory")
+        Role role
 ) {
 }
