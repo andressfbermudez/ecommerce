@@ -1,11 +1,11 @@
-package com.api.ecommerce.configuration;
+package com.api.ecommerce.web.config;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.context.annotation.Bean;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 
 @Configuration
 public class JacksonConfig {
@@ -18,4 +18,3 @@ public class JacksonConfig {
                 .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, true);
     }
 }
-

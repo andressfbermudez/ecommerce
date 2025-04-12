@@ -1,8 +1,7 @@
 package com.api.ecommerce.service;
 
-import com.api.ecommerce.web.dto.userdto.LoginDTO;
-import jakarta.validation.Valid;
 import org.springframework.stereotype.Service;
+import com.api.ecommerce.web.dto.userdto.LoginDTO;
 import com.api.ecommerce.web.dto.userdto.UserRegisterDTO;
 import com.api.ecommerce.persistence.entity.user.UserEntity;
 import org.springframework.beans.factory.annotation.Autowired;

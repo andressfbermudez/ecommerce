@@ -1,7 +1,7 @@
 package com.api.ecommerce.web.config;
 
-import org.springframework.http.HttpMethod;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -14,15 +14,23 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 public class SecurityConfig {
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
-        return httpSecurity
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        return http
+                // 1. Desactivar CSRF (recomendado si se usa JWT o solo APIs)
                 .csrf(AbstractHttpConfigurer::disable)
-                .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests((authorizeHttpRequests) ->
-                        authorizeHttpRequests
-                                .requestMatchers(HttpMethod.POST, "/api/users/auth/**").permitAll()
-                                .anyRequest()
-                                .authenticated()
+
+                // 2. Definir political de sesión (stateless para APIs)
+                .sessionManagement(session ->
+                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                )
+
+                // 4. Habilitar Basic Authentication
+                .httpBasic(Customizer.withDefaults())
+
+                // 3. Configurar autorización de requests
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/api/users/auth/**").permitAll()
+                        .anyRequest().authenticated()
                 )
                 .build();
     }
