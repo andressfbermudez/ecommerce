@@ -24,13 +24,13 @@ public class GlobalHandlerException {
 
     // Para capturar excepciones de tipo SQL constraint
     @ExceptionHandler(SQLIntegrityConstraintViolationException.class)
-    public ResponseEntity sqlIntegrityConstraintViolationExceptions(SQLIntegrityConstraintViolationException e) {
+    public ResponseEntity<String> sqlIntegrityConstraintViolationExceptions(SQLIntegrityConstraintViolationException e) {
         return  ResponseEntity.badRequest().body("Error: " + e.getMessage());
     }
 
     // Para capturar excepciones relacionadas a datos invalidados
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity methodArgumentNotValidExceptions(MethodArgumentNotValidException e) {
+    public ResponseEntity<String> methodArgumentNotValidExceptions(MethodArgumentNotValidException e) {
         // Extraer el último mensaje de error
         String errorMessage = e.getBindingResult()
                 .getFieldErrors()

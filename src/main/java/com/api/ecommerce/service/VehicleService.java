@@ -48,7 +48,7 @@ public class VehicleService {
         return null;
     }
 
-    public VehicleResponseDTO findById(Long id) {
+    public VehicleResponseDTO findByIdIncludingInactive(Long id) {
         if (vehicleRepository.existsById(id)) {
             Optional<VehicleEntity> optionalVehicle = vehicleRepository.findById(id);
             return VehicleResponseDTO.convertToVehicleResponseDTO(optionalVehicle.get());

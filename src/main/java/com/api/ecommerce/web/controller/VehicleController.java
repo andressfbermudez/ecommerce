@@ -62,7 +62,7 @@ public class VehicleController {
 
     @GetMapping("/find/{id}")
     public ResponseEntity<VehicleResponseDTO> findById(@PathVariable Long id) {
-        VehicleResponseDTO vehicleFound = vehicleService.findById(id);
+        VehicleResponseDTO vehicleFound = vehicleService.findByIdIncludingInactive(id);
         if (vehicleFound == null) {
             return ResponseEntity.notFound().build();
         }
