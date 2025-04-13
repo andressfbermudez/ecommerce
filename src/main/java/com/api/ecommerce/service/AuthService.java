@@ -12,6 +12,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 public class AuthService {
 
     private final UserRepository userRepository;
+    private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
     @Autowired
     public AuthService(UserRepository userRepository) {
@@ -19,13 +20,14 @@ public class AuthService {
     }
 
     public void createNewUser(UserRegisterDTO userRegisterDTO) {
-        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-        String hashedPassword = encoder.encode(userRegisterDTO.password());
-
-        UserEntity newUser = new UserEntity(
-                null, userRegisterDTO.username(), userRegisterDTO.email(),
-                hashedPassword, userRegisterDTO.role()
+        // Se recibe de userRegisterDTO todos los datos ingresados por el usuario,
+        // entre esos datos llega la contrasena sin encriptar, antes de almacenarla
+        // creamos un nuevo DTO con la contrasena encriptada.
+        UserRegisterDTO userRegisterDTPasswordEncrypted = new UserRegisterDTO(
+                userRegisterDTO.username(), userRegisterDTO.email(),
+                encoder.encode(userRegisterDTO.password()), userRegisterDTO.role()
         );
+        UserEntity newUser = new UserEntity(userRegisterDTPasswordEncrypted);
         userRepository.save(newUser);
     }
 

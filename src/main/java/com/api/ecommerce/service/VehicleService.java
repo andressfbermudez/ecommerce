@@ -6,9 +6,9 @@ import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 import com.api.ecommerce.web.dto.vehicledto.VehicleCreateDTO;
 import com.api.ecommerce.web.dto.vehicledto.VehicleUpdatedDTO;
+import org.springframework.beans.factory.annotation.Autowired;
 import com.api.ecommerce.web.dto.vehicledto.VehicleResponseDTO;
 import com.api.ecommerce.persistence.entity.vehicle.VehicleEntity;
-import org.springframework.beans.factory.annotation.Autowired;
 import com.api.ecommerce.persistence.repository.VehicleRepository;
 
 @Service

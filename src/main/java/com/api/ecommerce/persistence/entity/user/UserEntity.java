@@ -1,19 +1,16 @@
 package com.api.ecommerce.persistence.entity.user;
 
 import lombok.Getter;
-import lombok.Setter;
 import jakarta.persistence.*;
 import lombok.NoArgsConstructor;
-import lombok.AllArgsConstructor;
 import com.api.ecommerce.persistence.entity.Auditable;
+import com.api.ecommerce.web.dto.userdto.UserRegisterDTO;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
 @Table(name = "users")
 @Getter
-@Setter
 @NoArgsConstructor
-@AllArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
 public class UserEntity extends Auditable {
 
@@ -33,4 +30,17 @@ public class UserEntity extends Auditable {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Role role;
+
+    @Column(nullable = false)
+    private final Boolean locked = false;
+
+    @Column(nullable = false)
+    private final Boolean disabled = false;
+
+    public UserEntity(UserRegisterDTO userRegisterDTO) {
+        this.username = userRegisterDTO.username();
+        this.email = userRegisterDTO.email();
+        this.password = userRegisterDTO.password();
+        this.role = userRegisterDTO.role();
+    }
 }
