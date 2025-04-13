@@ -22,6 +22,10 @@ public class UserSecurityService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String usernameOrEmail) throws UsernameNotFoundException {
+        /*
+         * De esta forma ya esta funcionando la autenticacion con usuarios que
+         * esten almacenados en la base de datos.
+        */
         Optional<UserEntity> optionalUserEntity = userRepository.findByUsernameOrEmail(usernameOrEmail);
 
         if (optionalUserEntity.isPresent()) {

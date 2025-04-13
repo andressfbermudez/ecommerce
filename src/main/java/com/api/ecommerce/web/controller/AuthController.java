@@ -1,6 +1,7 @@
 package com.api.ecommerce.web.controller;
 
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import com.api.ecommerce.service.AuthService;
 import org.springframework.http.ResponseEntity;
 import com.api.ecommerce.web.dto.userdto.LoginDTO;
@@ -29,8 +30,12 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<Void> loginUser(@Valid @RequestBody LoginDTO loginDTO) {
-        authService.login(loginDTO);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<String> loginUser(@Valid @RequestBody LoginDTO loginDTO) {
+        String jwt = authService.login(loginDTO);
+
+        if (jwt != null) {
+            return ResponseEntity.ok().body(jwt);
+        }
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
 }
