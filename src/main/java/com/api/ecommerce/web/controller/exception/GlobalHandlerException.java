@@ -38,4 +38,9 @@ public class GlobalHandlerException {
                 .getDefaultMessage();
         return ResponseEntity.badRequest().body("Error: " + errorMessage);
     }
+
+    @ExceptionHandler(ValidationException.class)
+    public ResponseEntity<String> validationExceptions(ValidationException e) {
+        return  ResponseEntity.badRequest().body("Error: " + e.getMessage());
+    }
 }

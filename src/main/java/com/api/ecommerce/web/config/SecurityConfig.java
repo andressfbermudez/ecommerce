@@ -35,7 +35,10 @@ public class SecurityConfig {
 
                 // 3. Configurar autorización de requests
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(HttpMethod.POST,"/api/users/auth/**").permitAll()
+                        .requestMatchers(HttpMethod.POST,"/api/users/auth/*").permitAll()
+                        .requestMatchers(HttpMethod.GET,"/api/users/all").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET,"/api/users/search/*").hasRole("ADMIN")
+                        .requestMatchers(new RegexRequestMatcher("^/api/users/\\d+$", "PUT")).hasRole("ROOT")
                         .requestMatchers(HttpMethod.POST,"/api/vehicles/create").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.GET,"/api/vehicles/all").hasAnyRole("ADMIN", "EMPLOYEE", "CUSTOMER")
                         .requestMatchers(HttpMethod.GET,"/api/vehicles/all-including-inactive").hasRole("ADMIN")

@@ -5,11 +5,13 @@ import jakarta.persistence.*;
 import lombok.NoArgsConstructor;
 import com.api.ecommerce.persistence.entity.Auditable;
 import com.api.ecommerce.web.dto.userdto.UserRegisterDTO;
+import lombok.Setter;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
 @Table(name = "users")
 @Getter
+@Setter
 @NoArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
 public class UserEntity extends Auditable {
@@ -32,10 +34,10 @@ public class UserEntity extends Auditable {
     private Role role;
 
     @Column(nullable = false)
-    private final Boolean locked = false;
+    private Boolean locked = false;
 
     @Column(nullable = false)
-    private final Boolean disabled = false;
+    private Boolean disabled = false;
 
     public UserEntity(UserRegisterDTO userRegisterDTO) {
         this.username = userRegisterDTO.username();
