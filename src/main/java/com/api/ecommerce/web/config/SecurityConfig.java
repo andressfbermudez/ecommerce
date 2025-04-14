@@ -1,10 +1,12 @@
 package com.api.ecommerce.web.config;
 
 import org.springframework.http.HttpMethod;
+import com.api.ecommerce.web.service.JwtFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.Customizer;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -12,12 +14,20 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.web.util.matcher.RegexRequestMatcher;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
+
+    private final JwtFilter jwtFilter;
+
+    @Autowired
+    public SecurityConfig(JwtFilter jwtFilter) {
+        this.jwtFilter = jwtFilter;
+    }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -30,26 +40,26 @@ public class SecurityConfig {
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
 
-                // 4. Habilitar Basic Authentication
-                .httpBasic(Customizer.withDefaults())
-
                 // 3. Configurar autorización de requests
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.POST,"/api/users/auth/*").permitAll()
-                        .requestMatchers(HttpMethod.GET,"/api/users/all").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.GET,"/api/users/search/*").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET,"/api/users/all").hasAnyRole("ROOT", "ADMIN")
+                        .requestMatchers(HttpMethod.GET,"/api/users/search/*").hasAnyRole("ROOT", "ADMIN")
                         .requestMatchers(new RegexRequestMatcher("^/api/users/\\d+$", "PUT")).hasRole("ROOT")
-                        .requestMatchers(HttpMethod.POST,"/api/vehicles/create").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.GET,"/api/vehicles/all").hasAnyRole("ADMIN", "EMPLOYEE", "CUSTOMER")
-                        .requestMatchers(HttpMethod.GET,"/api/vehicles/all-including-inactive").hasRole("ADMIN")
-                        .requestMatchers(new RegexRequestMatcher("^/api/vehicles/\\d+$", "GET")).hasAnyRole("ADMIN", "EMPLOYEE", "CUSTOMER")
-                        .requestMatchers(new RegexRequestMatcher("^/api/vehicles/find/\\d+$", "GET")).hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.GET,"/api/vehicles/search").hasAnyRole("ADMIN", "EMPLOYEE", "CUSTOMER")
-                        .requestMatchers(new RegexRequestMatcher("^/api/vehicles/\\d+$", "PUT")).hasRole("ADMIN")
-                        .requestMatchers(new RegexRequestMatcher("^/api/vehicles/\\d+$", "DELETE")).hasRole("ADMIN")
-                        .requestMatchers(new RegexRequestMatcher("^/api/vehicles/restore/\\d+$", "PUT")).hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST,"/api/vehicles/create").hasAnyRole("ROOT", "ADMIN")
+                        .requestMatchers(HttpMethod.GET,"/api/vehicles/all").hasAnyRole("ROOT", "ADMIN", "EMPLOYEE", "CUSTOMER")
+                        .requestMatchers(HttpMethod.GET,"/api/vehicles/all-including-inactive").hasAnyRole("ROOT", "ADMIN")
+                        .requestMatchers(new RegexRequestMatcher("^/api/vehicles/\\d+$", "GET")).hasAnyRole("ROOT", "ADMIN", "EMPLOYEE", "CUSTOMER")
+                        .requestMatchers(new RegexRequestMatcher("^/api/vehicles/find/\\d+$", "GET")).hasAnyRole("ROOT", "ADMIN")
+                        .requestMatchers(HttpMethod.GET,"/api/vehicles/search").hasAnyRole("ROOT", "ADMIN", "EMPLOYEE", "CUSTOMER")
+                        .requestMatchers(new RegexRequestMatcher("^/api/vehicles/\\d+$", "PUT")).hasAnyRole("ROOT", "ADMIN")
+                        .requestMatchers(new RegexRequestMatcher("^/api/vehicles/\\d+$", "DELETE")).hasAnyRole("ROOT", "ADMIN")
+                        .requestMatchers(new RegexRequestMatcher("^/api/vehicles/restore/\\d+$", "PUT")).hasAnyRole("ROOT", "ADMIN")
                         .anyRequest().authenticated()
                 )
+
+                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class) // Agregar filtro de autenticacion por medio de JWT antes de UsernamePasswordAuthenticationFilter.
+                //.httpBasic(Customizer.withDefaults()) Eliminamos BasicAuthentication
                 .build();
     }
 

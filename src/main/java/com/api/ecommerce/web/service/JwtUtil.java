@@ -6,6 +6,7 @@ import java.util.concurrent.TimeUnit;
 import jakarta.annotation.PostConstruct;
 import com.auth0.jwt.algorithms.Algorithm;
 import org.springframework.stereotype.Component;
+import com.auth0.jwt.exceptions.JWTVerificationException;
 import org.springframework.beans.factory.annotation.Value;
 
 @Component
@@ -48,12 +49,33 @@ public class JwtUtil {
      }
 
      // Metodo que recibe un email y devuelve un JWT (tipo String).
-     public String create(String userEmail) {
+     public String create(String usernameOrEmail) {
          return JWT.create()
-                 .withSubject(userEmail) // Asignar el subject del token, que suele ser el usuario o ID principal.
+                 .withSubject(usernameOrEmail) // Asignar el subject del token, que suele ser el usuario o ID principal.
                  .withIssuer("ecommerce_api") // Definir quién emite el token
                  .withIssuedAt(new Date()) // Marcar la fecha/hora de emisión del token.
                  .withExpiresAt(EXPIRED_DATE) // Fecha de expiración del token (debe ser un Date).
                  .sign(ALGORITHM); //Firma el token con un algoritmo (por ejemplo, HMAC256 con la clave secreta).
+     }
+
+     // Metodo para validar si un JWT es valido, es decir, que no ha sido modificado, o la fecha
+     // de expiracion es valida, etc.
+     public Boolean isValid(String jwt) {
+          try {
+               JWT.require(ALGORITHM)
+                       .build()
+                       .verify(jwt);
+               return true;
+          } catch (JWTVerificationException e) {
+               return false;
+          }
+     }
+
+     // Metodo para obtener el usuario del JWT validado.
+     public String getSubject(String jwt) {
+          return JWT.require(ALGORITHM)
+                  .build()
+                  .verify(jwt)
+                  .getSubject();
      }
 }

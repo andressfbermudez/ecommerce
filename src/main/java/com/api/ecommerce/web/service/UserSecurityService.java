@@ -1,4 +1,4 @@
-package com.api.ecommerce.service;
+package com.api.ecommerce.web.service;
 
 import java.util.Optional;
 import org.springframework.stereotype.Service;
