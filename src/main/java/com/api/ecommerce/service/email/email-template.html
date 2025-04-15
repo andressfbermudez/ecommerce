@@ -1,0 +1,37 @@
+<html>
+    <head>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                background-color: #f9f9f9;
+                padding: 20px;
+            }
+            .container {
+                background-color: #fff;
+                border-radius: 8px;
+                padding: 20px;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            }
+            .token {
+                background-color: #eee;
+                padding: 10px;
+                border-radius: 4px;
+                word-break: break-word;
+            }
+            .note {
+                font-size: 12px;
+                color: #888;
+            }
+        </style>
+    </head>
+
+    <body>
+        <div class="container">
+            <h2>Tu JSON Web Token</h2>
+            <p>Utiliza el siguiente token para autenticarte:</p>
+            <pre class="token">{{JWT}}</pre>
+            <p class="note">Este token tiene una validez de 15 dias a partir de su creacion.</p>
+            <p class="note">No compartas este token con nadie.</p>
+        </div>
+    </body>
+</html>

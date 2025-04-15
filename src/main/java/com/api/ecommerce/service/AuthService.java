@@ -1,9 +1,13 @@
 package com.api.ecommerce.service;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Stream;
+
+import com.api.ecommerce.service.email.EmailService;
+import jakarta.mail.MessagingException;
 import jakarta.transaction.Transactional;
 import com.api.ecommerce.web.service.JwtUtil;
 import org.springframework.stereotype.Service;
@@ -28,19 +32,21 @@ public class AuthService {
     private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
     private final AuthenticationManager authenticationManager;
     private final JwtUtil jwtUtil;
+    private final EmailService emailService;
 
     @Autowired
     public AuthService(UserRepository userRepository,
                        AuthenticationManager authenticationManager,
-                       JwtUtil jwtUtil
+                       JwtUtil jwtUtil, EmailService emailService
     ) {
         this.userRepository = userRepository;
         this.authenticationManager = authenticationManager;
         this.jwtUtil = jwtUtil;
+        this.emailService = emailService;
     }
 
     // Este metodo realiza el proceso de autenticacion y si es exitoso retorna un JWT (String).
-    public String login(LoginDTO loginDTO) {
+    public Boolean login(LoginDTO loginDTO) throws MessagingException, IOException {
         UsernamePasswordAuthenticationToken user =
                 new UsernamePasswordAuthenticationToken(loginDTO.usernameOrEmail(), loginDTO.password());
 
@@ -49,10 +55,19 @@ public class AuthService {
 
         // Si el usuario se autentico correctamente se retorna un JWT (String).
         if (authentication.isAuthenticated()) {
-            // Retornar un JWT con el usuario autenticado.
-            return jwtUtil.create(loginDTO.usernameOrEmail());
+            String jwt = jwtUtil.create(loginDTO.usernameOrEmail());
+
+            // Obtener el email del usuario autenticado para enviarle alli el JWT.
+            String emailAuthenticateUser =
+                    userRepository.findByUsernameOrEmail(jwtUtil.getSubject(jwt)).get().getEmail();
+
+            System.out.println("\nEmail: " + emailAuthenticateUser);
+
+            // Enviar el JWT al correo del usuario autenticado.
+            emailService.sendJWTByEmail(emailAuthenticateUser, jwt);
+            return true;
         }
-        return null;
+        return false;
     }
 
     public void createNewUser(UserRegisterDTO userRegisterDTO) {
