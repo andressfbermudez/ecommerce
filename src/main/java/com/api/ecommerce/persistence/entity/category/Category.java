@@ -1,4 +1,4 @@
-package com.api.ecommerce.persistence.entity;
+package com.api.ecommerce.persistence.entity.category;
 
 import lombok.Getter;
 import lombok.Setter;

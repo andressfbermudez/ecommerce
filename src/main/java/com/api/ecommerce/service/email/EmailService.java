@@ -1,17 +1,17 @@
 package com.api.ecommerce.service.email;
 
+import java.nio.file.Path;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.charset.StandardCharsets;
+
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import org.springframework.stereotype.Service;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import java.nio.file.Path;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.nio.charset.StandardCharsets;
 
 @Service
 public class EmailService {
@@ -28,9 +28,9 @@ public class EmailService {
         MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
 
         helper.setTo(addressee);
-        helper.setSubject("Envio de JWT para autenticación en Ecommerce API");
+        helper.setSubject("Token JWT generado para autenticación en Ecommerce API");
 
-        // Leer y reemplazar
+        // Obtener el archivo .html
         Path path = Paths.get("src/main/java/com/api/ecommerce/service/email/email-template.html");
         String html = Files.readString(path, StandardCharsets.UTF_8);
 

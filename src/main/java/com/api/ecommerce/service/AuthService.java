@@ -1,18 +1,17 @@
 package com.api.ecommerce.service;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.io.IOException;
 import java.util.stream.Stream;
-
-import com.api.ecommerce.service.email.EmailService;
 import jakarta.mail.MessagingException;
 import jakarta.transaction.Transactional;
 import com.api.ecommerce.web.service.JwtUtil;
 import org.springframework.stereotype.Service;
 import com.api.ecommerce.web.dto.userdto.LoginDTO;
 import jakarta.persistence.EntityNotFoundException;
+import com.api.ecommerce.service.email.EmailService;
 import com.api.ecommerce.web.dto.userdto.UserUpdateDTO;
 import org.springframework.security.core.Authentication;
 import com.api.ecommerce.web.dto.userdto.UserResponseDTO;

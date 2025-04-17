@@ -35,30 +35,37 @@ public class SecurityConfig {
                 // 1. Desactivar CSRF (recomendado si se usa JWT o solo APIs)
                 .csrf(AbstractHttpConfigurer::disable)
 
-                // 2. Definir political de sesión (stateless para APIs)
+                // 2. Definir politica de sesión (stateless para APIs)
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
 
                 // 3. Configurar autorización de requests
                 .authorizeHttpRequests(auth -> auth
+                        // Endpoints publicos
                         .requestMatchers(HttpMethod.POST,"/api/users/auth/*").permitAll()
+                        .requestMatchers(HttpMethod.GET,"/api/vehicles/all").permitAll()
+                        .requestMatchers(new RegexRequestMatcher("^/api/vehicles/\\d+$", "GET")).permitAll()
+                        .requestMatchers(HttpMethod.GET,"/api/vehicles/search").permitAll()
+
+                        // Endpoints para gestion administrativa de usuarios
+                        .requestMatchers(new RegexRequestMatcher("^/api/users/\\d+$", "PUT")).hasRole("ROOT")
                         .requestMatchers(HttpMethod.GET,"/api/users/all").hasAnyRole("ROOT", "ADMIN")
                         .requestMatchers(HttpMethod.GET,"/api/users/search/*").hasAnyRole("ROOT", "ADMIN")
-                        .requestMatchers(new RegexRequestMatcher("^/api/users/\\d+$", "PUT")).hasRole("ROOT")
-                        .requestMatchers(HttpMethod.POST,"/api/vehicles/create").hasAnyRole("ROOT", "ADMIN")
-                        .requestMatchers(HttpMethod.GET,"/api/vehicles/all").hasAnyRole("ROOT", "ADMIN", "EMPLOYEE", "CUSTOMER")
+
+                        // Endpoints para gestion administrativa de vehiculos
                         .requestMatchers(HttpMethod.GET,"/api/vehicles/all-including-inactive").hasAnyRole("ROOT", "ADMIN")
-                        .requestMatchers(new RegexRequestMatcher("^/api/vehicles/\\d+$", "GET")).hasAnyRole("ROOT", "ADMIN", "EMPLOYEE", "CUSTOMER")
                         .requestMatchers(new RegexRequestMatcher("^/api/vehicles/find/\\d+$", "GET")).hasAnyRole("ROOT", "ADMIN")
-                        .requestMatchers(HttpMethod.GET,"/api/vehicles/search").hasAnyRole("ROOT", "ADMIN", "EMPLOYEE", "CUSTOMER")
+                        .requestMatchers(HttpMethod.POST,"/api/vehicles/create").hasAnyRole("ROOT", "ADMIN")
                         .requestMatchers(new RegexRequestMatcher("^/api/vehicles/\\d+$", "PUT")).hasAnyRole("ROOT", "ADMIN")
                         .requestMatchers(new RegexRequestMatcher("^/api/vehicles/\\d+$", "DELETE")).hasAnyRole("ROOT", "ADMIN")
                         .requestMatchers(new RegexRequestMatcher("^/api/vehicles/restore/\\d+$", "PUT")).hasAnyRole("ROOT", "ADMIN")
+
                         .anyRequest().authenticated()
                 )
 
-                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class) // Agregar filtro de autenticacion por medio de JWT antes de UsernamePasswordAuthenticationFilter.
+                // Agregar el filtro de autenticacion por JWTs
+                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class) // Agregar filtro de autenticacion por medio de JWT antes de la autenticacion por medio de UsernamePasswordAuthenticationFilter.
                 //.httpBasic(Customizer.withDefaults()) Eliminamos BasicAuthentication
                 .build();
     }

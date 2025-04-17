@@ -1,19 +1,17 @@
 package com.api.ecommerce.persistence.entity.user;
 
-import lombok.Getter;
-import jakarta.persistence.*;
-import lombok.NoArgsConstructor;
 import com.api.ecommerce.persistence.entity.Auditable;
 import com.api.ecommerce.web.dto.userdto.UserRegisterDTO;
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
 @Table(name = "users")
 @Getter
 @Setter
 @NoArgsConstructor
-@EntityListeners(AuditingEntityListener.class)
 public class UserEntity extends Auditable {
 
     @Id

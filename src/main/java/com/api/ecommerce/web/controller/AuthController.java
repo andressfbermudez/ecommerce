@@ -1,18 +1,19 @@
 package com.api.ecommerce.web.controller;
 
-import java.util.List;
-import java.io.IOException;
-import jakarta.mail.MessagingException;
-import jakarta.validation.Valid;
-import org.springframework.http.HttpStatus;
 import com.api.ecommerce.service.AuthService;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
 import com.api.ecommerce.web.dto.userdto.LoginDTO;
-import com.api.ecommerce.web.dto.userdto.UserUpdateDTO;
 import com.api.ecommerce.web.dto.userdto.UserRegisterDTO;
 import com.api.ecommerce.web.dto.userdto.UserResponseDTO;
+import com.api.ecommerce.web.dto.userdto.UserUpdateDTO;
+import jakarta.mail.MessagingException;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.io.IOException;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/users")

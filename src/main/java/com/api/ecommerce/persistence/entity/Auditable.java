@@ -22,4 +22,7 @@ public abstract class Auditable {
 
     @LastModifiedDate
     private LocalDateTime lastModifiedDate;
+
+    @Column(name = "is_active", nullable = false)
+    private Boolean isActive = true;
 }
