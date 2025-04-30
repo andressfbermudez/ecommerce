@@ -44,9 +44,14 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         // Endpoints publicos
                         .requestMatchers(HttpMethod.POST,"/api/users/auth/*").permitAll()
+
                         .requestMatchers(HttpMethod.GET,"/api/vehicles/all").permitAll()
                         .requestMatchers(new RegexRequestMatcher("^/api/vehicles/\\d+$", "GET")).permitAll()
                         .requestMatchers(HttpMethod.GET,"/api/vehicles/search").permitAll()
+
+                        .requestMatchers(HttpMethod.GET,"/api/accessories/all").permitAll()
+                        .requestMatchers(new RegexRequestMatcher("^/api/accessories/\\d+$", "GET")).permitAll()
+                        .requestMatchers(HttpMethod.GET,"/api/accessories/search").permitAll()
 
                         // Endpoints para gestion administrativa de usuarios
                         .requestMatchers(new RegexRequestMatcher("^/api/users/\\d+$", "PUT")).hasRole("ROOT")
@@ -60,6 +65,11 @@ public class SecurityConfig {
                         .requestMatchers(new RegexRequestMatcher("^/api/vehicles/\\d+$", "PUT")).hasAnyRole("ROOT", "ADMIN")
                         .requestMatchers(new RegexRequestMatcher("^/api/vehicles/\\d+$", "DELETE")).hasAnyRole("ROOT", "ADMIN")
                         .requestMatchers(new RegexRequestMatcher("^/api/vehicles/restore/\\d+$", "PUT")).hasAnyRole("ROOT", "ADMIN")
+
+                        // Endpoints para gestion administrativa de accesorios para vehiculos
+                        .requestMatchers(HttpMethod.POST,"/api/accesories/create").hasAnyRole("ROOT", "ADMIN")
+                        .requestMatchers(HttpMethod.GET,"/all-including-inactives").hasAnyRole("ROOT", "ADMIN")
+                        .requestMatchers(new RegexRequestMatcher("^/api/accessories/find/\\d+$", "GET")).hasAnyRole("ROOT", "ADMIN")
 
                         .anyRequest().authenticated()
                 )

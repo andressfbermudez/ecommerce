@@ -20,3 +20,19 @@ INSERT INTO vehicles (
 ('2025-04-04 23:41:46.720586', '2025-04-04 23:41:46.720586', 'Renault', 'Black', 'Alaskan 2024, potencia europea con alma aventurera.', 4, 2500, 'DIESEL', 'US', 0, 'Alaskan', 'Renault Alaskan 2024', 62450.5, 5, 'AUTOMATIC', 2024, 1, 1),
 ('2025-04-04 23:41:59.081990', '2025-04-04 23:41:59.081990', 'Fiat', 'Silver', 'Fullback 2023, eficiencia italiana para tu día a día.', 4, 2400, 'DIESEL', 'US', 2000, 'Fullback', 'Fiat Fullback 2023', 58200.7, 7, 'MANUAL', 2023, 1, 1),
 ('2025-04-04 23:42:11.846286', '2025-04-04 23:42:11.846286', 'Suzuki', 'Green', 'Equator 2024, versatilidad compacta con gran rendimiento.', 4, 2500, 'GASOLINE', 'US', 0, 'Equator', 'Suzuki Equator 2024', 58990.0, 10, 'AUTOMATIC', 2024, 1, 1);
+
+
+INSERT INTO accessories(id, created_date, last_modified_date, brand,
+ description, is_active, name, price, stock, category_id)
+VALUES
+(1, '2025-04-27 10:41:49.360489', '2025-04-27 10:41:49.360489', 'AutoPro', 'Alfombra de goma resistente para todo tipo de clima.', 1, 'Alfombra Antideslizante', 29.99, 150, 2),
+(2, '2025-04-27 10:47:14.749604', '2025-04-27 10:47:14.749604', 'RoadMaster', 'Cubrevolante de cuero sintético para mejor agarre.', 1, 'Cubrevolante Deportivo', 19.99, 50, 2),
+(3, '2025-04-27 10:47:26.166381', '2025-04-27 10:47:26.166381', 'BikeCarry', 'Soporte para transportar hasta 2 bicicletas.', 1, 'Portabicicletas Trasero', 89.99, 20, 2),
+(4, '2025-04-27 10:47:35.806408', '2025-04-27 10:47:35.806408', 'CargoTidy', 'Organizador plegable para mantener el orden.', 1, 'Organizador de Maletero', 24.5, 35, 2),
+(5, '2025-04-27 10:47:45.039588', '2025-04-27 10:47:45.039588', 'VisionSafe', 'Cámara impermeable con visión nocturna.', 1, 'Cámara de Reversa', 45.0, 15, 2),
+(7, '2025-04-27 10:47:58.727202', '2025-04-27 10:47:58.727202', 'SafeTrip', 'Incluye cables, linterna y botiquín básico.', 1, 'Kit de Emergencia', 59.99, 40, 2),
+(8, '2025-04-27 10:48:08.115020', '2025-04-27 10:48:08.115020', 'VoltDrive', 'Cargador rápido doble puerto para encendedor.', 1, 'Cargador USB para Auto', 12.99, 100, 2),
+(9, '2025-04-27 10:48:16.750955', '2025-04-27 10:48:16.750955', 'PetRide', 'Protector impermeable ideal para mascotas.', 1, 'Protector de Asientos', 34.75, 25, 2),
+(10, '2025-04-27 10:48:26.122326', '2025-04-27 10:48:26.122326', 'WideView', 'Amplía el ángulo de visión en el retrovisor.', 1, 'Espejo Retrovisor Panorámico', 14.99, 60, 2),
+(11, '2025-04-27 10:48:33.994097', '2025-04-27 10:48:33.994097', 'SunBlock', 'Protección contra rayos UV para parabrisas.', 1, 'Parasol Plegable', 17.0, 80, 2),
+(12, '2025-04-27 10:48:41.901784', '2025-04-27 10:48:41.901784', 'BrightRide', 'Kit de luces LED RGB para interiores.', 1, 'Luces LED Interiores', 39.9, 45, 2);

@@ -26,9 +26,10 @@ public class VehicleController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<Void> createVehicle(@Valid @RequestBody VehicleCreateDTO vehicleCreateDTO,
-                                              UriComponentsBuilder uriComponentsBuilder) {
-
+    public ResponseEntity<Void> createVehicle(
+            @Valid @RequestBody VehicleCreateDTO vehicleCreateDTO,
+            UriComponentsBuilder uriComponentsBuilder
+    ) {
         Long id = vehicleService.createVehicle(vehicleCreateDTO);
 
         // Para generar la URL donde puede consultarse el recurso creado

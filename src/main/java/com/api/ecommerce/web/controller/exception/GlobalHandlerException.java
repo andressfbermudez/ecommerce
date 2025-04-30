@@ -39,6 +39,7 @@ public class GlobalHandlerException {
         return ResponseEntity.badRequest().body("Error: " + errorMessage);
     }
 
+    // Este metodo es para capturar las excepciones personalizadas creadas por el desarrollador
     @ExceptionHandler(ValidationException.class)
     public ResponseEntity<String> validationExceptions(ValidationException e) {
         return  ResponseEntity.badRequest().body("Error: " + e.getMessage());

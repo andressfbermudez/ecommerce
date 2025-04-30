@@ -15,16 +15,16 @@ public interface VehicleRepository extends JpaRepository<VehicleEntity, Long> {
     boolean existsByIdAndIsActiveTrue(Long id);
 
     @Query(value = """
-                SELECT * FROM vehicles
-                WHERE (:brand IS NULL OR brand = :brand)
-                AND (:model IS NULL OR model = :model)
-                AND (:year IS NULL OR year = :year)
-                AND (:price IS NULL OR price = :price)
-                AND (:doors IS NULL OR doors = :doors)
-                AND (:color IS NULL OR color = :color)
-                AND (:location IS NULL OR location = :location)
-                AND is_active = TRUE
-                """, nativeQuery = true)
+        SELECT * FROM vehicles
+        WHERE (:brand IS NULL OR LOWER(brand) LIKE CONCAT('%', LOWER(:brand), '%'))
+          AND (:model IS NULL OR LOWER(model) LIKE CONCAT('%', LOWER(:model), '%'))
+          AND (:year IS NULL OR year = :year)
+          AND (:price IS NULL OR price = :price)
+          AND (:doors IS NULL OR doors = :doors)
+          AND (:color IS NULL OR LOWER(color) LIKE CONCAT('%', LOWER(:color), '%'))
+          AND (:location IS NULL OR LOWER(location) LIKE CONCAT('%', LOWER(:location), '%'))
+          AND is_active = TRUE
+        """, nativeQuery = true)
     List<VehicleEntity> search(String brand, String model, Integer year,
                                Double price, Integer doors, String color, String location);
 }
