@@ -19,6 +19,7 @@ import java.util.List;
 @RequestMapping("/api/users")
 public class AuthController {
 
+    // Inyeccion de un servicio
     private final AuthService authService;
 
     @Autowired
@@ -26,12 +27,15 @@ public class AuthController {
         this.authService = authService;
     }
 
+
+    // Para crear un nuevo usuario
     @PostMapping("/auth/register")
     public ResponseEntity<Void> registerUser(@Valid @RequestBody UserRegisterDTO userRegisterDTO) {
         authService.createNewUser(userRegisterDTO);
         return ResponseEntity.ok().build();
     }
 
+    // Para loguear un usuario
     @PostMapping("/auth/login")
     public ResponseEntity<Void> loginUser(@Valid @RequestBody LoginDTO loginDTO) throws MessagingException, IOException {
         if (authService.login(loginDTO)) {
@@ -40,12 +44,16 @@ public class AuthController {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
 
+
+    // Para obtener todos los usuarios
     @GetMapping("/all")
     public ResponseEntity<List<UserResponseDTO>> getUsers() {
         List<UserResponseDTO> userResponseDTOS = authService.getAllUsers();
         return ResponseEntity.ok(userResponseDTOS);
     }
 
+
+    // Para buscar un usuario por nombre o email
     @GetMapping("/search/{usernameOrEmail}")
     public ResponseEntity<UserResponseDTO> getUsers(@Valid @PathVariable String usernameOrEmail) {
         UserResponseDTO userResponseDTO = authService.findUserByUsernameOrEmail(usernameOrEmail);
@@ -55,6 +63,8 @@ public class AuthController {
         return ResponseEntity.notFound().build();
     }
 
+
+    // Para actualizar un usuario
     @PutMapping("/{id}")
     public ResponseEntity<Void> updateUser(@Valid @PathVariable Long id,
                                            @Valid @RequestBody UserUpdateDTO userUpdateDTO) {

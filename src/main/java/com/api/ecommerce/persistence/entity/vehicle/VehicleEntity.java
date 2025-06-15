@@ -1,7 +1,7 @@
 package com.api.ecommerce.persistence.entity.vehicle;
 
-import com.api.ecommerce.persistence.entity.category.Category;
 import com.api.ecommerce.persistence.entity.Product;
+import com.api.ecommerce.persistence.entity.category.Category;
 import com.api.ecommerce.web.dto.vehicledto.VehicleCreateDTO;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -14,6 +14,11 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class VehicleEntity extends Product {
+
+    /*
+     * Atributos de la entidad vehiculo que seran columnas
+     * en la tabla vehiculos
+     */
 
     @Column(nullable = false, length = 100)
     private String model;
@@ -48,6 +53,7 @@ public class VehicleEntity extends Product {
     @JoinColumn(name = "category_id", nullable = false)
     protected Category category = new Category(1L, "vehicle");
 
+    // Contructor para la creacion de un vehiculo
     public VehicleEntity(VehicleCreateDTO vehicleCreateDTO) {
         this.setName(vehicleCreateDTO.name().trim());
         this.setDescription(vehicleCreateDTO.description().trim());

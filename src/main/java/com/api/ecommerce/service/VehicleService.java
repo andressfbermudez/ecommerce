@@ -1,19 +1,21 @@
 package com.api.ecommerce.service;
 
-import java.util.List;
-import java.util.Optional;
-import jakarta.transaction.Transactional;
-import org.springframework.stereotype.Service;
-import com.api.ecommerce.web.dto.vehicledto.VehicleCreateDTO;
-import com.api.ecommerce.web.dto.vehicledto.VehicleUpdatedDTO;
-import org.springframework.beans.factory.annotation.Autowired;
-import com.api.ecommerce.web.dto.vehicledto.VehicleResponseDTO;
 import com.api.ecommerce.persistence.entity.vehicle.VehicleEntity;
 import com.api.ecommerce.persistence.repository.VehicleRepository;
+import com.api.ecommerce.web.dto.vehicledto.VehicleCreateDTO;
+import com.api.ecommerce.web.dto.vehicledto.VehicleResponseDTO;
+import com.api.ecommerce.web.dto.vehicledto.VehicleUpdatedDTO;
+import jakarta.transaction.Transactional;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class VehicleService {
 
+    // Inyeccion del repositorio de la entidad vehiculo
     private final VehicleRepository vehicleRepository;
 
     @Autowired
@@ -21,11 +23,15 @@ public class VehicleService {
         this.vehicleRepository = vehicleRepository;
     }
 
+
+    // Para crear un nuevo vehiculo
     public Long createVehicle(VehicleCreateDTO vehicleCreateDTO) {
         VehicleEntity newVehicleEntity = new VehicleEntity(vehicleCreateDTO);
         return vehicleRepository.save(newVehicleEntity).getId();
     }
 
+
+    // Para obtener todos los vehiculos activos
     public List<VehicleResponseDTO> findAllIsActiveTrue() {
         return vehicleRepository.findByIsActiveTrue()
                 .stream()
@@ -33,6 +39,8 @@ public class VehicleService {
                 .toList();
     }
 
+
+    // Para obtener todos los vehiculos incluidos los inactivos
     public List<VehicleResponseDTO> findAllIncludingInactive() {
         return vehicleRepository.findAll()
                 .stream()
@@ -40,6 +48,8 @@ public class VehicleService {
                 .toList();
     }
 
+
+    // Para buscar un vehiculo activo por medio de su id
     public VehicleResponseDTO findByIdAndIsActiveTrue(Long id) {
         if (vehicleRepository.existsByIdAndIsActiveTrue(id)) {
             Optional<VehicleEntity> optionalVehicle = vehicleRepository.findByIdAndIsActiveTrue(id);
@@ -48,6 +58,8 @@ public class VehicleService {
         return null;
     }
 
+
+    // Para buscar un vehiculo que este activo o inactivo por medio de su id
     public VehicleResponseDTO findByIdIncludingInactive(Long id) {
         if (vehicleRepository.existsById(id)) {
             Optional<VehicleEntity> optionalVehicle = vehicleRepository.findById(id);
@@ -56,6 +68,8 @@ public class VehicleService {
         return null;
     }
 
+
+    // Para buscar un vehiculo por palabras clave
     public List<VehicleResponseDTO> search(String brand, String model, Integer year, Double price,
                                            Integer doors, String color, String location
     ) {
@@ -65,6 +79,8 @@ public class VehicleService {
                 .toList();
     }
 
+
+    // Para actualizar un vehiculo
     @Transactional
     public Long updateVehicle(Long id, VehicleUpdatedDTO v) {
         return vehicleRepository.findByIdAndIsActiveTrue(id).map(vehicleEntity -> {
@@ -86,11 +102,15 @@ public class VehicleService {
         }).orElse(null);
     }
 
+
+    // Para realizar eliminacion logica de un vehiculo
     @Transactional
     public void softDeleteVehicleById(Long id) {
         vehicleRepository.findByIdAndIsActiveTrue(id).ifPresent(vehicleEntity -> vehicleEntity.setIsActive(false));
     }
 
+
+    // Para reactivar un vehiculo eliminado logicamente
     @Transactional
     public Long restoreVehicleById(Long id) {
         return vehicleRepository.findById(id)
@@ -100,6 +120,7 @@ public class VehicleService {
                 })
                 .orElse(null);
     }
+
 // *********************************************************************************************************************
     public boolean existsById(Long id) {
         return vehicleRepository.existsById(id);

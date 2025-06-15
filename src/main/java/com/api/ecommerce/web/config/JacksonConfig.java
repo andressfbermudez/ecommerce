@@ -7,6 +7,7 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.context.annotation.Configuration;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 
+// Para serializar datos JSON
 @Configuration
 public class JacksonConfig {
 

@@ -1,32 +1,34 @@
 package com.api.ecommerce.service;
 
+import com.api.ecommerce.persistence.entity.user.UserEntity;
+import com.api.ecommerce.persistence.repository.UserRepository;
+import com.api.ecommerce.service.email.EmailService;
+import com.api.ecommerce.web.controller.exception.ValidationException;
+import com.api.ecommerce.web.dto.userdto.LoginDTO;
+import com.api.ecommerce.web.dto.userdto.UserRegisterDTO;
+import com.api.ecommerce.web.dto.userdto.UserResponseDTO;
+import com.api.ecommerce.web.dto.userdto.UserUpdateDTO;
+import com.api.ecommerce.web.service.JwtUtil;
+import jakarta.mail.MessagingException;
+import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Service;
+
+import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.io.IOException;
 import java.util.stream.Stream;
-import jakarta.mail.MessagingException;
-import jakarta.transaction.Transactional;
-import com.api.ecommerce.web.service.JwtUtil;
-import org.springframework.stereotype.Service;
-import com.api.ecommerce.web.dto.userdto.LoginDTO;
-import jakarta.persistence.EntityNotFoundException;
-import com.api.ecommerce.service.email.EmailService;
-import com.api.ecommerce.web.dto.userdto.UserUpdateDTO;
-import org.springframework.security.core.Authentication;
-import com.api.ecommerce.web.dto.userdto.UserResponseDTO;
-import com.api.ecommerce.web.dto.userdto.UserRegisterDTO;
-import com.api.ecommerce.persistence.entity.user.UserEntity;
-import org.springframework.beans.factory.annotation.Autowired;
-import com.api.ecommerce.persistence.repository.UserRepository;
-import com.api.ecommerce.web.controller.exception.ValidationException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 
 @Service
 public class AuthService {
 
+    // Para inyectar los servicios necesarios
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
     private final AuthenticationManager authenticationManager;
@@ -69,6 +71,8 @@ public class AuthService {
         return false;
     }
 
+
+    // Para crear un nuevo usuario
     public void createNewUser(UserRegisterDTO userRegisterDTO) {
         // Se recibe de userRegisterDTO todos los datos ingresados por el usuario,
         // entre esos datos llega la contrasena sin encriptar, antes de almacenarla
@@ -81,6 +85,8 @@ public class AuthService {
         userRepository.save(newUser);
     }
 
+
+    // Para obtener todos los usuarios
     public List<UserResponseDTO> getAllUsers() {
         return userRepository.findAll()
                 .stream()
@@ -90,6 +96,8 @@ public class AuthService {
                 .toList();
     }
 
+
+    // Para obtener un usuario por medio de su nombre o su email
     public UserResponseDTO findUserByUsernameOrEmail(String usernameOrEmail) {
         Optional<UserEntity> optionalUserEntity =  userRepository.findByUsernameOrEmail(usernameOrEmail);
         if (optionalUserEntity.isPresent()) {
@@ -100,6 +108,8 @@ public class AuthService {
         return null;
     }
 
+
+    // Para actualizar un usuario
     @Transactional
     public void updateUser(Long id, UserUpdateDTO userUpdateDTO) {
         validateRequiredFieldsBlock(userUpdateDTO);
@@ -139,6 +149,7 @@ public class AuthService {
         }
     }
 
+    // Para verificar si existe un usuario
     public boolean existsById(Long id) {
         return userRepository.existsById(id);
     }

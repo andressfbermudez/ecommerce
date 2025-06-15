@@ -18,6 +18,7 @@ import java.util.List;
 @Validated
 public class AccesoryController {
 
+    // Inyeccion de un servicio
     private final AccessoryService accessoryService;
 
     @Autowired
@@ -25,6 +26,8 @@ public class AccesoryController {
         this.accessoryService = accessoryService;
     }
 
+
+    // Para crear un nuevo accesorio
     @PostMapping("/create")
     public ResponseEntity<Void> createAccesory(@Valid @RequestBody AccessoryCreateDTO accessoryCreateDTO,
                                                UriComponentsBuilder uriComponentsBuilder
@@ -39,18 +42,24 @@ public class AccesoryController {
         return ResponseEntity.created(url).build();
     }
 
+
+    // Para obtener todos los accesorios que esten activos
     @GetMapping("/all")
     public ResponseEntity<List<AccessoryResponseDTO>> findAllIsActiveTrue() {
         List<AccessoryResponseDTO> accessories = accessoryService.findAllIsActiveTrue();
         return ResponseEntity.ok(accessories);
     }
 
+
+    // Para obtener todos los accesorios incluidos los inactivos
     @GetMapping("/all-including-inactives")
     public ResponseEntity<List<AccessoryResponseDTO>> findAllIncludingInactive() {
         List<AccessoryResponseDTO> accessoriesIncludingInactives = accessoryService.findAllIncludingInactives();
         return ResponseEntity.ok(accessoriesIncludingInactives);
     }
 
+
+    // Para buscar un accesorio que este activo por medio de su id
     @GetMapping("/{id}")
     public ResponseEntity<AccessoryResponseDTO> findByIdAndIsActiveTrue(@PathVariable Long id) {
         AccessoryResponseDTO accessoryFound = accessoryService.findByIdAndIsActiveTrue(id);
@@ -60,6 +69,8 @@ public class AccesoryController {
         return ResponseEntity.ok(accessoryFound);
     }
 
+
+    // Para obtener un accesorio activo o inactivo por medio de su id
     @GetMapping("/find/{id}")
     public ResponseEntity<AccessoryResponseDTO> findById(@PathVariable Long id) {
         AccessoryResponseDTO accessoryFound = accessoryService.findByIdIncludingInactive(id);
@@ -69,6 +80,8 @@ public class AccesoryController {
         return ResponseEntity.ok(accessoryFound);
     }
 
+
+    // Para buscar un accesorio por medio de palabras clave
     @GetMapping("/search")
     public ResponseEntity<List<AccessoryResponseDTO>> search(
             @RequestParam(required = false) String name,
