@@ -2,8 +2,11 @@ package com.api.ecommerce.service;
 
 import com.api.ecommerce.persistence.entity.accessories.AccessoryEntity;
 import com.api.ecommerce.persistence.repository.AccessoryRepository;
+import com.api.ecommerce.web.dto.accessorydto.AccesoryUpdatedDTO;
 import com.api.ecommerce.web.dto.accessorydto.AccessoryCreateDTO;
 import com.api.ecommerce.web.dto.accessorydto.AccessoryResponseDTO;
+import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -72,5 +75,43 @@ public class AccessoryService {
                 .stream()
                 .map(AccessoryResponseDTO::convertToAccessoryResponseDTO)
                 .toList();
+    }
+
+
+    // Para actualizar un accesorio por medio de su id
+    public Long updatedAccesory(Long id, @Valid AccesoryUpdatedDTO a) {
+        return accessoryRepository.findByIdAndIsActiveTrue(id).map(vehicleEntity -> {
+            if (a.name() != null) vehicleEntity.setName(a.name().trim());
+            if (a.description() != null) vehicleEntity.setDescription(a.description().trim());
+            if (a.price() != null) vehicleEntity.setPrice(a.price());
+            if (a.stock() != null) vehicleEntity.setStock(a.stock());
+            if (a.brand() != null) vehicleEntity.setBrand(a.brand().trim());
+
+            return vehicleEntity.getId();
+        }).orElse(null);
+    }
+
+
+    // Para realizar eliminacion logica de un accesorio
+    @Transactional
+    public void softDeleteAccesoryById(Long id) {
+        accessoryRepository.findByIdAndIsActiveTrue(id).ifPresent(accessoryEntity -> accessoryEntity.setIsActive(false));
+    }
+
+
+    // Para reactivar un vehiculo eliminado logicamente
+    @Transactional
+    public Long restoreAccesoryById(Long id) {
+        return accessoryRepository.findById(id)
+                .map(accessoryEntity -> {
+                    accessoryEntity.setIsActive(true);
+                    return accessoryEntity.getId();
+                })
+                .orElse(null);
+    }
+
+// *********************************************************************************************************************
+    public boolean existsById(Long id) {
+        return accessoryRepository.existsById(id);
     }
 }

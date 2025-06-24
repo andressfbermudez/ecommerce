@@ -1,6 +1,7 @@
 package com.api.ecommerce.web.controller;
 
 import com.api.ecommerce.service.AccessoryService;
+import com.api.ecommerce.web.dto.accessorydto.AccesoryUpdatedDTO;
 import com.api.ecommerce.web.dto.accessorydto.AccessoryCreateDTO;
 import com.api.ecommerce.web.dto.accessorydto.AccessoryResponseDTO;
 import jakarta.validation.Valid;
@@ -96,5 +97,55 @@ public class AccesoryController {
                 accessoryService.search(name, brand, price);
 
         return ResponseEntity.ok(accessoriesFound);
+    }
+
+
+    // Para actualizar un vehiculo
+    @PutMapping("/{id}")
+    public ResponseEntity<Void> updateVehicle(
+            @PathVariable Long id,
+            @Valid @RequestBody AccesoryUpdatedDTO accesoryUpdatedDTO,
+            UriComponentsBuilder uriComponentsBuilder
+    ) {
+        Long idAccesoryUpdated = accessoryService.updatedAccesory(id, accesoryUpdatedDTO);
+
+        if (idAccesoryUpdated == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        URI url = uriComponentsBuilder.path("/api/vehicles/{id}")
+                .buildAndExpand(idAccesoryUpdated)
+                .toUri();
+
+        return ResponseEntity.ok().location(url).build(); // Retorna 200 OK con la URL en el header
+    }
+
+
+    // Para realizar eliminacion logica de un accesorio
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> softDeleteAccesory(@PathVariable Long id) {
+        if (!accessoryService.existsById(id)) {
+            return ResponseEntity.badRequest().build();
+        }
+        accessoryService.softDeleteAccesoryById(id);
+        return ResponseEntity.noContent().build();
+    }
+
+
+
+    // Para reactivar un vehiculo eliminado logicamente
+    @PutMapping("/restore/{id}")
+    public ResponseEntity<Void> restoreAccesory(@PathVariable Long id, UriComponentsBuilder uriComponentsBuilder) {
+        Long idRestoreAccesory = accessoryService.restoreAccesoryById(id);
+
+        if (idRestoreAccesory == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        URI url = uriComponentsBuilder.path("/api/vehicles/{id}")
+                .buildAndExpand(idRestoreAccesory)
+                .toUri();
+
+        return ResponseEntity.ok().location(url).build();
     }
 }

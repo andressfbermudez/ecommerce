@@ -69,9 +69,12 @@ public class SecurityConfig {
                         .requestMatchers(new RegexRequestMatcher("^/api/vehicles/restore/\\d+$", "PUT")).hasAnyRole("ROOT", "ADMIN")
 
                         // Endpoints para gestion administrativa de accesorios para vehiculos
+                        .requestMatchers(HttpMethod.GET,"/api/accesories/all-including-inactive").hasAnyRole("ROOT", "ADMIN")
+                        .requestMatchers(new RegexRequestMatcher("^/api/accesories/find/\\d+$", "GET")).hasAnyRole("ROOT", "ADMIN")
                         .requestMatchers(HttpMethod.POST,"/api/accesories/create").hasAnyRole("ROOT", "ADMIN")
-                        .requestMatchers(HttpMethod.GET,"/all-including-inactives").hasAnyRole("ROOT", "ADMIN")
-                        .requestMatchers(new RegexRequestMatcher("^/api/accessories/find/\\d+$", "GET")).hasAnyRole("ROOT", "ADMIN")
+                        .requestMatchers(new RegexRequestMatcher("^/api/accesories/\\d+$", "PUT")).hasAnyRole("ROOT", "ADMIN")
+                        .requestMatchers(new RegexRequestMatcher("^/api/accesories/\\d+$", "DELETE")).hasAnyRole("ROOT", "ADMIN")
+                        .requestMatchers(new RegexRequestMatcher("^/api/accesories/restore/\\d+$", "PUT")).hasAnyRole("ROOT", "ADMIN")
 
                         .anyRequest().authenticated()
                 )
